@@ -1,7 +1,8 @@
-import { doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp, getDoc, collection, getDocs, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
 import { db } from "./firebaseClient";
 
 export interface UserProfile {
+  id?: string;
   username: string;
   email: string;
   phoneNumber: string;
@@ -12,7 +13,7 @@ export interface UserProfile {
 }
 
 // Create a new user profile in Firestore
-export const createUserProfile = (userId: string, data: Omit<UserProfile, 'createdAt'>) => {
+export const createUserProfile = (userId: string, data: Omit<UserProfile, 'createdAt' | 'id'>) => {
   const userRef = doc(db, "users", userId);
   return setDoc(userRef, {
     ...data,
@@ -26,8 +27,35 @@ export const getUserProfile = async (userId: string): Promise<UserProfile | null
   const docSnap = await getDoc(userRef);
 
   if (docSnap.exists()) {
-    return docSnap.data() as UserProfile;
+    const data = docSnap.data();
+    return {
+      id: docSnap.id,
+      ...data
+    } as UserProfile;
   } else {
     return null;
   }
+};
+
+// Helper to convert Firestore doc to UserProfile
+const toUserProfile = (doc: QueryDocumentSnapshot<DocumentData>): UserProfile => {
+  const data = doc.data();
+  return {
+    id: doc.id,
+    username: data.username || "",
+    email: data.email || "",
+    phoneNumber: data.phoneNumber || "",
+    hostel: data.hostel || "",
+    block: data.block || "",
+    room: data.room || "",
+    createdAt: data.createdAt,
+  };
+};
+
+// Get all user profiles from Firestore
+export const getAllUsers = async (): Promise<UserProfile[]> => {
+  const usersCollection = collection(db, "users");
+  const userSnapshot = await getDocs(usersCollection);
+  const userList = userSnapshot.docs.map(toUserProfile);
+  return userList;
 };

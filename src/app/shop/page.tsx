@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -8,6 +9,7 @@ import { getProducts } from "@/firebase/products";
 import type { Product } from "@/lib/types";
 import { Search, LoaderCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { FloatingCartButton } from "@/components/FloatingCartButton";
 
 export default function ShopPage() {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -105,6 +107,7 @@ export default function ShopPage() {
           onOpenChange={handleCloseModal}
         />
       )}
+      <FloatingCartButton />
     </div>
   );
 }

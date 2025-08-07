@@ -17,6 +17,7 @@ import { createOrder } from "@/firebase/orders";
 import { getUserProfile } from "@/firebase/user";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { FloatingCartButton } from "@/components/FloatingCartButton";
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, getCartTotal } = useCart();
@@ -89,6 +90,7 @@ export default function CartPage() {
             <Link href="/shop">Continue Shopping</Link>
           </Button>
         </div>
+        <FloatingCartButton />
       </div>
     );
   }
@@ -113,14 +115,6 @@ export default function CartPage() {
         {cart.map((item) => (
           <Card key={getCartItemKey(item)} className="overflow-hidden">
             <CardContent className="p-4 flex flex-col md:flex-row items-start md:items-center gap-4">
-              <div className="w-full md:w-32 h-32 md:h-auto aspect-square relative rounded-md overflow-hidden flex-shrink-0">
-                <Image
-                  src={item.image}
-                  alt={item.imageAlt}
-                  fill
-                  className="object-cover"
-                />
-              </div>
               <div className="flex-grow">
                 <h3 className="text-xl font-semibold">{item.name}</h3>
                 <p className="text-sm text-muted-foreground">{item.variationName}</p>
@@ -166,6 +160,7 @@ export default function CartPage() {
             )}
             </Button>
        </div>
+       <FloatingCartButton />
     </div>
   );
 }

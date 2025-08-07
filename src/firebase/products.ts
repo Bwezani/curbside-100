@@ -1,4 +1,4 @@
-import { collection, getDocs, QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
+import { collection, getDocs, QueryDocumentSnapshot, DocumentData, addDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "./firebaseClient";
 import type { Product } from "@/lib/types";
 
@@ -24,4 +24,10 @@ export const getProducts = async (): Promise<Product[]> => {
   const productSnapshot = await getDocs(productsCollection);
   const productList = productSnapshot.docs.map(toProduct);
   return productList;
+};
+
+// Add a new product to Firestore
+export const addProduct = async (productData: Omit<Product, 'id'> & { id: string }): Promise<void> => {
+  const productRef = doc(db, "products", productData.id);
+  await setDoc(productRef, productData);
 };

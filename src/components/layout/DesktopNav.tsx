@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, ShoppingCart, User } from "lucide-react";
+import { Leaf, ShoppingCart, User, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/use-auth";
@@ -56,6 +56,17 @@ export function DesktopNav() {
             {link.label}
           </Link>
         ))}
+        {user?.displayName === "Bwezani Juma" && (
+            <Link
+                href="/admin"
+                className={cn(
+                "transition-colors hover:text-primary flex items-center",
+                pathname === "/admin" ? "text-primary" : "text-foreground/60"
+                )}
+            >
+                <Shield className="mr-1 h-5 w-5"/> Admin
+            </Link>
+        )}
       </nav>
       <div className="flex items-center gap-4">
         <Button asChild variant="outline" size="lg" className="relative">

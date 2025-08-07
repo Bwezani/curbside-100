@@ -9,6 +9,7 @@ import {
   ShoppingCart,
   User,
   LogIn,
+  Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
@@ -22,15 +23,28 @@ export function MobileNav() {
   
   const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
 
-  const navItems = [
+  const baseNavItems = [
     { href: "/", icon: Home, label: "Home" },
     { href: "/shop", icon: ShoppingBasket, label: "Shop" },
-    { href: "/cart", icon: ShoppingCart, label: "Cart", badge: cartItemCount },
-    ...(!loading && user
-      ? [{ href: "/profile", icon: User, label: "Profile" }]
-      : [{ href: "/auth/signin", icon: LogIn, label: "Sign In" }]),
   ];
+  
+  if (user?.displayName === "Bwezani Juma") {
+    baseNavItems.push({ href: "/admin", icon: Shield, label: "Admin" });
+  }
 
+  baseNavItems.push({ href: "/cart", icon: ShoppingCart, label: "Cart", badge: cartItemCount });
+  
+  const authItem = !loading && user
+    ? { href: "/profile", icon: User, label: "Profile" }
+    : { href: "/auth/signin", icon: LogIn, label: "Sign In" };
+  
+  const navItems = [...baseNavItems, authItem];
+
+
+  // Hide nav on my-orders page
+  if (pathname === '/my-orders') {
+    return null;
+  }
 
   return (
     <nav className="md:hidden fixed bottom-4 left-4 right-4 h-16 rounded-2xl border bg-background/80 backdrop-blur-lg shadow-lg z-50">
@@ -48,7 +62,7 @@ export function MobileNav() {
             >
               <item.icon className="h-6 w-6" />
               <span className="text-xs font-medium">{item.label}</span>
-              {item.badge && item.badge > 0 && (
+              {item.badge !== undefined && item.badge > 0 && (
                  <Badge className="absolute top-0 right-4 h-5 w-5 flex items-center justify-center rounded-full p-0 text-xs">
                     {item.badge}
                  </Badge>
