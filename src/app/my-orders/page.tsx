@@ -85,7 +85,7 @@ export default function MyOrdersPage() {
           <Card key={order.id}>
             <CardHeader>
               <CardTitle className="text-lg flex justify-between items-center">
-                <span>Order #{order.id.substring(0, 7)}...</span>
+                <span>Order #{order.id}</span>
                 <span className="text-base font-medium text-primary">K{order.totalPrice.toFixed(2)}</span>
               </CardTitle>
               <CardDescription>

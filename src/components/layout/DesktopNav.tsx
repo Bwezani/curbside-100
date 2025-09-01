@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, ShoppingCart, User, Shield } from "lucide-react";
+import { Leaf, ShoppingCart, User, Shield, ClipboardList } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/use-auth";
@@ -36,6 +36,77 @@ export function DesktopNav() {
   };
 
   const cartItemCount = cart.reduce((total, item) => total + item.quantity, 0);
+  
+  if (pathname === '/') {
+    return (
+      <header className="fixed top-0 left-0 right-0 z-10 hidden md:flex items-center justify-between h-20 px-8 bg-transparent text-white">
+        <Link href="/" className="flex items-center gap-2">
+            <Leaf className="h-7 w-7 text-primary" />
+            <span className="text-2xl font-bold tracking-tight">Curbside.</span>
+        </Link>
+        <div className="flex items-center gap-4">
+            {!loading && (
+            <>
+                {user ? (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-white/10">
+                        <Avatar className="h-10 w-10">
+                        <AvatarImage src={user.photoURL || ""} alt={user.displayName || ""} />
+                        <AvatarFallback className="bg-black/50">{getInitials(user.displayName)}</AvatarFallback>
+                        </Avatar>
+                    </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                        <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user.displayName}</p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                            {user.email}
+                        </p>
+                        </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                     <DropdownMenuItem asChild>
+                        <Link href="/shop">
+                          <ShoppingCart className="mr-2 h-4 w-4" />
+                          <span>Go to Shop</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/profile">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                        </Link>
+                    </DropdownMenuItem>
+                     <DropdownMenuItem asChild>
+                        <Link href="/my-orders">
+                          <ClipboardList className="mr-2 h-4 w-4" />
+                          <span>My Orders</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={signOut}>
+                        Sign out
+                    </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                ) : (
+                 <>
+                    <Button asChild size="lg" variant="outline" className="bg-white text-background hover:bg-white/90">
+                        <Link href="/auth/signin">Sign In</Link>
+                    </Button>
+                    <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
+                        <Link href="/auth/signup">Sign Up</Link>
+                    </Button>
+                 </>
+                )}
+            </>
+            )}
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="hidden md:flex items-center justify-between h-20 px-8 border-b">
@@ -108,6 +179,12 @@ export function DesktopNav() {
                       <span>Profile</span>
                     </Link>
                   </DropdownMenuItem>
+                   <DropdownMenuItem asChild>
+                        <Link href="/my-orders">
+                          <ClipboardList className="mr-2 h-4 w-4" />
+                          <span>My Orders</span>
+                        </Link>
+                    </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut}>
                     Sign out

@@ -19,6 +19,8 @@ export interface Order {
   username: string;
   phoneNumber: string;
   hostel: string;
+  deliveryOption: 'now' | 'later';
+  deliveryTime?: string;
 }
 
 export interface OrderData {
@@ -27,18 +29,20 @@ export interface OrderData {
   username: string;
   phoneNumber: string;
   hostel: string;
+  deliveryOption: 'now' | 'later';
+  deliveryTime?: string;
 }
 
 // Create a new order in Firestore
 export const createOrder = async (userId: string, data: OrderData): Promise<string> => {
   const ordersCollection = collection(db, "orders");
-  const docRef = await addDoc(ordersCollection, {
+  const orderDocRef = await addDoc(ordersCollection, {
     userId,
     ...data,
     status: "in progress",
     createdAt: serverTimestamp(),
   });
-  return docRef.id;
+  return orderDocRef.id;
 };
 
 
@@ -59,6 +63,8 @@ export const getOrder = async (orderId: string): Promise<Order | null> => {
             username: data.username,
             phoneNumber: data.phoneNumber,
             hostel: data.hostel,
+            deliveryOption: data.deliveryOption,
+            deliveryTime: data.deliveryTime
         } as Order;
     } else {
         return null;
@@ -78,6 +84,8 @@ const toOrder = (doc: QueryDocumentSnapshot<DocumentData>): Order => {
     username: data.username,
     phoneNumber: data.phoneNumber,
     hostel: data.hostel,
+    deliveryOption: data.deliveryOption,
+    deliveryTime: data.deliveryTime,
   } as Order;
 };
 

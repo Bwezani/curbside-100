@@ -1,4 +1,4 @@
-import { collection, getDocs, QueryDocumentSnapshot, DocumentData, addDoc, doc, setDoc } from "firebase/firestore";
+import { collection, getDocs, QueryDocumentSnapshot, DocumentData, addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseClient";
 import type { Product } from "@/lib/types";
 
@@ -31,3 +31,9 @@ export const addProduct = async (productData: Omit<Product, 'id'> & { id: string
   const productRef = doc(db, "products", productData.id);
   await setDoc(productRef, productData);
 };
+
+// Update an existing product in Firestore
+export const updateProduct = async (productId: string, productData: Partial<Omit<Product, 'id'>>): Promise<void> => {
+  const productRef = doc(db, "products", productId);
+  await updateDoc(productRef, productData);
+}

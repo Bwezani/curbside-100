@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CheckCircle, LoaderCircle, AlertTriangle } from "lucide-react";
+import { CheckCircle, LoaderCircle, AlertTriangle, Clock } from "lucide-react";
 import { format } from "date-fns";
 
 export default function CheckoutPage() {
@@ -152,12 +152,19 @@ export default function CheckoutPage() {
           <div className="grid gap-2 text-sm">
              <div className="flex justify-between">
                <span className="text-muted-foreground">Order ID:</span>
-               <span className="font-mono">{order.id}</span>
+               <span className="font-mono">#{order.id}</span>
              </div>
              <div className="flex justify-between">
                <span className="text-muted-foreground">Order Date:</span>
                <span>{formatDate(order.createdAt)}</span>
              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Delivery Time:</span>
+                <span className="font-medium flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    {order.deliveryTime}
+                </span>
+              </div>
              <div className="flex justify-between items-center">
                <span className="text-muted-foreground">Status:</span>
                <span className="flex items-center gap-2 capitalize font-medium">
@@ -196,4 +203,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-

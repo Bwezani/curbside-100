@@ -10,11 +10,13 @@ import {
   User,
   LogIn,
   Shield,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { useCart } from "@/hooks/use-cart";
 import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 
 export function MobileNav() {
   const pathname = usePathname();
@@ -40,6 +42,20 @@ export function MobileNav() {
   
   const navItems = [...baseNavItems, authItem];
 
+  if (pathname === '/') {
+    return (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/50 to-transparent z-50 p-4">
+            <div className="flex justify-around items-center h-full gap-4">
+                 <Button asChild size="lg" className="w-full h-12 text-lg" variant="outline">
+                    <Link href="/auth/signin">Sign In</Link>
+                </Button>
+                <Button asChild size="lg" className="w-full h-12 text-lg">
+                    <Link href="/auth/signup">Sign Up</Link>
+                </Button>
+            </div>
+        </div>
+    )
+  }
 
   // Hide nav on my-orders page
   if (pathname === '/my-orders') {

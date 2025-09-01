@@ -1,3 +1,4 @@
+
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
@@ -23,6 +24,13 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+   webpack: (config, { isServer }) => {
+    // This is required by Leaflet to avoid issues with server-side rendering
+    if (!isServer) {
+      config.resolve.alias.leaflet = require.resolve('leaflet');
+    }
+    return config;
   },
 };
 

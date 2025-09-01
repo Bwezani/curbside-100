@@ -1,6 +1,7 @@
 
 import type { Metadata } from "next";
 import "./globals.css";
+import 'leaflet/dist/leaflet.css';
 import { Header } from "@/components/layout/Header";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/hooks/use-auth";
@@ -25,6 +26,16 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
           rel="stylesheet"
         />
+        <style>
+          {`
+            .leaflet-pane {
+              z-index: 2 !important;
+            }
+            .leaflet-control-container {
+              z-index: 1001 !important;
+            }
+          `}
+        </style>
       </head>
       <body className="font-body antialiased">
         <AuthProvider>

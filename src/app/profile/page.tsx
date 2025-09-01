@@ -1,9 +1,10 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { User, LogIn, Home, Phone, MapPin } from "lucide-react";
+import { User, LogIn, Home, Phone, MapPin, University, Mail } from "lucide-react";
 import Link from "next/link";
 import {
   Card,
@@ -43,6 +44,40 @@ export default function ProfilePage() {
   };
 
   const isLoading = authLoading || loadingProfile;
+  
+  const renderAddress = () => {
+      if (!userProfile) return null;
+      if (userProfile.userType === 'student') {
+          return (
+              <>
+                <div className="flex items-center gap-4">
+                  <University className="h-5 w-5 text-muted-foreground" />
+                  <span>{userProfile?.university}</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <Home className="h-5 w-5 text-muted-foreground" />
+                  <span>{userProfile?.hostel}</span>
+                </div>
+                 <div className="flex items-center gap-4">
+                  <MapPin className="h-5 w-5 text-muted-foreground" />
+                  <span>Block {userProfile?.block}, Room {userProfile?.room}</span>
+                </div>
+              </>
+          );
+      } else {
+          return (
+            <>
+                <div className="flex items-start gap-4">
+                  <MapPin className="h-5 w-5 text-muted-foreground mt-1" />
+                  <div className="flex flex-col">
+                      <span>{userProfile?.address}</span>
+                      <span className="text-sm text-muted-foreground">{userProfile?.township}, {userProfile?.city}</span>
+                  </div>
+                </div>
+            </>
+          );
+      }
+  };
 
   if (isLoading) {
     return (
@@ -104,25 +139,22 @@ export default function ProfilePage() {
             <Avatar className="h-24 w-24 mb-4">
               <AvatarImage src={user.photoURL || ""} alt={userProfile?.username || "User"} />
               <AvatarFallback className="text-3xl">
-                {getInitials(userProfile?.username) || <User className="h-12 w-12" />}
+                {getInitials(userProfile?.firstName) || <User className="h-12 w-12" />}
               </AvatarFallback>
             </Avatar>
-            <CardTitle className="text-3xl">{userProfile?.username || "User Profile"}</CardTitle>
-            <CardDescription>{user.email}</CardDescription>
+            <CardTitle className="text-3xl">{userProfile?.firstName} {userProfile?.lastName}</CardTitle>
+            <CardDescription className="capitalize text-primary font-semibold">{userProfile?.userType} Account</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 text-left">
+            <div className="flex items-center gap-4">
+                <Mail className="h-5 w-5 text-muted-foreground" />
+                <span>{user.email}</span>
+            </div>
             <div className="flex items-center gap-4">
               <Phone className="h-5 w-5 text-muted-foreground" />
               <span>{userProfile?.phoneNumber}</span>
             </div>
-             <div className="flex items-center gap-4">
-              <Home className="h-5 w-5 text-muted-foreground" />
-              <span>{userProfile?.hostel} Hostel</span>
-            </div>
-             <div className="flex items-center gap-4">
-              <MapPin className="h-5 w-5 text-muted-foreground" />
-              <span>Block {userProfile?.block}, Room {userProfile?.room}</span>
-            </div>
+            {renderAddress()}
           </CardContent>
           <CardFooter className="flex justify-center">
             <Button onClick={signOut} variant="destructive">
@@ -134,3 +166,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
