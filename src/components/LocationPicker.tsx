@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 // import L from 'leaflet';
 import L from "@/lib/leafletFix";
-import 'leaflet/dist/leaflet.css';
+// import 'leaflet/dist/leaflet.css';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
