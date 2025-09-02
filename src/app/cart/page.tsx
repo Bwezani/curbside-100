@@ -8,10 +8,13 @@ import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ShoppingCart, Trash2, Plus, Minus, LoaderCircle, Calendar as CalendarIcon, Clock } from "lucide-react";
+import { ShoppingCart, Trash2, Plus, Minus, LoaderCircle, Calendar as CalendarIcon, Clock, Wallet } from "lucide-react";
 import {
   Card,
   CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { createOrder } from "@/firebase/orders";
 import { getUserProfile } from "@/firebase/user";
@@ -257,12 +260,33 @@ export default function CartPage() {
         <h1 className="text-4xl font-bold tracking-tight">Your Cart</h1>
         <Button variant="outline" onClick={clearCart} disabled={isCheckingOut}>Clear Cart</Button>
       </div>
-
-      <Card className="mb-8 p-6">
-        <h2 className="text-2xl font-semibold">
-          Cart Total: <span className="text-primary">K{getCartTotal().toFixed(2)}</span>
-        </h2>
+      
+      <Card className="mb-8">
+        <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                <div>
+                    <CardTitle className="text-2xl">
+                    Cart Total: <span className="text-primary">K{getCartTotal().toFixed(2)}</span>
+                    </CardTitle>
+                    <CardDescription className="mt-2 flex items-center gap-2 text-base">
+                        <Wallet className="h-5 w-5" />
+                        Payment Method: Pay on Delivery
+                    </CardDescription>
+                </div>
+                <Button size="lg" className="text-lg w-full md:w-auto" onClick={handleProceedToCheckout} disabled={isCheckingOut || cart.length === 0}>
+                    {isCheckingOut ? (
+                    <>
+                        <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />
+                        Processing...
+                    </>
+                    ) : (
+                    "Proceed to Checkout"
+                    )}
+                </Button>
+            </div>
+        </CardContent>
       </Card>
+
 
       <div className="space-y-6">
         {cart.map((item) => (
@@ -301,19 +325,8 @@ export default function CartPage() {
         ))}
       </div>
 
-       <div className="mt-8 flex justify-end">
-          <Button size="lg" className="text-lg" onClick={handleProceedToCheckout} disabled={isCheckingOut || cart.length === 0}>
-            {isCheckingOut ? (
-              <>
-                <LoaderCircle className="mr-2 h-5 w-5 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              "Proceed to Checkout"
-            )}
-            </Button>
-       </div>
        <FloatingCartButton />
     </div>
   );
 }
+
