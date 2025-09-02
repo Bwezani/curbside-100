@@ -37,7 +37,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { createUserProfile } from "@/firebase/user";
 import { LoaderCircle, GraduationCap, User as UserIcon } from "lucide-react";
 import dynamic from 'next/dynamic';
-import 'leaflet/dist/leaflet.css';
+// import 'leaflet/dist/leaflet.css';
 
 
 const LocationPicker = dynamic(() => import('@/components/LocationPicker').then(mod => mod.LocationPicker), { ssr: false, loading: () => <p>Loading map...</p> });
